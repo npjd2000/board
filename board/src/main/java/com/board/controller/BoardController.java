@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BoardController {
 	
-	//http://localhost:8080/test/hello
+	//http://localhost:8080/board/test/hello
 	@GetMapping("/test/hello")
 	public String hello() {
 		return "Hello String test2";
