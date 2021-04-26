@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,8 +72,14 @@ public class EnrollmentController {
 		System.out.println("createDate : " + user.getCreateDate());
 		
 		// ENUM
-		user.setRole(RoleType.USER); 
-		userRepository.save(user);
+		user.setRole(RoleType.USER);
+		
+		try {
+			userRepository.save(user);
+	
+		} catch (Exception e) {
+			return "회원 가입 실패2";		
+		}
 		return "회원 가입 완료2";		
 
 	}
@@ -125,5 +133,35 @@ public class EnrollmentController {
 		// id를 전달하지 않으면 insert 해줌
 		userRepository.save(user);  // 더디 체킹 
 		return null;
+	}
+	
+	// http://localhost:8080/board/userUpdate2
+	@Transactional  // 함수 종료시에 자동 commit 됨 
+	@PutMapping("/userUpdate2/{id}")
+	public User userUpdate2(@PathVariable int id, @RequestBody User userRequest) {
+		System.out.println("id : " + id);
+		System.out.println("password : " + userRequest.getPassword());
+		System.out.println("email : " + userRequest.getEmail());
+		
+		User user = userRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("수정에 실패했습니다.");
+		});
+		
+		// 영속화 -> 더디 체킹
+		user.setPassword(userRequest.getPassword());
+		user.setEmail(userRequest.getEmail());
+		
+		return user;
+	}
+	
+	// http://localhost:8080/board/delete
+	@DeleteMapping("/delete/{id}")
+	public String delete(@PathVariable int id) {
+		try {
+			userRepository.deleteById(id);
+		} catch (Exception e) {
+			return "삭제에 실패했습니다.";
+		}
+		return "삭제되었습니다.";
 	}
 }
