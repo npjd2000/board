@@ -1,14 +1,15 @@
 package com.board.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class BoardController {
+@Controller
+public class BoardController{
 	
-	//http://localhost:8080/board/test/hello
-	@GetMapping("/test/hello")
-	public String hello() {
-		return "Hello String test2";
+	@GetMapping({"","/"})  //슬래시 넣거나 안넣거나 둘다 허용
+	public String index() {
+		//WEB-INF/views/index.jsp
+		//src/main/resources/templates/index.html
+		return "index";
 	}
 }

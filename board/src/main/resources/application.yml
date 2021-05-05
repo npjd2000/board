@@ -8,7 +8,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /board
+    context-path: /
     encoding:
       charset: UTF-8
       enabled: true
@@ -41,3 +41,8 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+      
+  spring:
+    thymeleaf:
+      cache: false
+      prefix: classpath:/templates/
